@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FingerPrinter.iml" filepath="$PROJECT_DIR$/FingerPrinter.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fingerprinter.iml" filepath="$PROJECT_DIR$/fingerprinter.iml" />
     </modules>
   </component>
 </project>

@@ -1,21 +1,20 @@
 package fingerprint.tapptus.com.fingerprinter;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.File;
-import java.io.FileOutputStream;
 
 import asia.kanopi.fingerscan.Status;
+import java.sql.Timestamp;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tvMessage = (TextView) findViewById(R.id.tvMessage);
-        ivFinger = (ImageView) findViewById(R.id.ivFingerDisplay);
+        tvMessage = findViewById(R.id.tvMessage);
+        ivFinger = findViewById(R.id.ivFingerDisplay);
     }
 
     public void startScan(View view) {
@@ -42,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         int status;
         String errorMessage;
-        switch(requestCode) {
-            case (SCAN_FINGER) : {
+        switch (requestCode) {
+            case (SCAN_FINGER): {
                 if (resultCode == RESULT_OK) {
                     status = data.getIntExtra("status", Status.ERROR);
                     if (status == Status.SUCCESS) {
@@ -51,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
                         img = data.getByteArrayExtra("img");
                         bm = BitmapFactory.decodeByteArray(img, 0, img.length);
                         ivFinger.setImageBitmap(bm);
-                        this.saveImage(bm, "huella");
+                        this.saveImage(bm, new Timestamp(System.currentTimeMillis()).toString());
                     } else {
                         errorMessage = data.getStringExtra("errorMessage");
-                        tvMessage.setText("-- Error: " +  errorMessage + " --");
+                        tvMessage.setText("-- Error: " + errorMessage + " --");
                     }
                 }
                 break;
@@ -63,22 +62,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveImage(Bitmap finalBitmap, String ImageName) {
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root);
-        myDir.mkdirs();
-        String fname = "Finger-" + ImageName + ".jpg";
-        File file = new File(myDir, fname);
-        if (file.exists()) file.delete();
-        Log.i("LOAD", root + fname);
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-            Toast.makeText(this, "Image saved", Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Error " + e.getMessage(), Toast.LENGTH_LONG).show();
+        int check = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (check == PackageManager.PERMISSION_GRANTED) {
+            MediaStore.Images.Media.insertImage(getApplicationContext().getContentResolver(),
+                    finalBitmap, "Finger-" + ImageName + ".jpg", "description");
+        } else {
+            requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, 1024);
         }
     }
 }

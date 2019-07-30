@@ -1,35 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="fingerprint.tapptus.com.fingerprinter.MainActivity">
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context="fingerprint.tapptus.com.fingerprinter.MainActivity"
+    >
 
-    <Button
-        android:id="@+id/buttonScan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Scan finger"
-        android:layout_centerHorizontal="true"
-        android:onClick="startScan"/>
+  <ImageView
+      android:id="@+id/ivFingerDisplay"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:contentDescription="Scanned fingerprint"
+      android:scaleType="fitXY"
+      />
 
-    <ImageView
-        android:id="@+id/ivFingerDisplay"
-        android:layout_width="384dp"
-        android:layout_height="290dp"
-        android:scaleType="fitXY"
-        android:layout_gravity="center"
-        android:contentDescription="Scanned fingerprint"
-        android:layout_below="@+id/buttonScan"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+  <TextView
+      android:id="@+id/tvMessage"
+      android:layout_width="wrap_content"
+      android:layout_height="0dp"
+      android:layout_weight="0.5"
+      android:layout_gravity="center"
+      android:layout_marginBottom="12dp"
+      android:layout_marginTop="12dp"
+      android:textAlignment="center"
+      android:textAppearance="@style/TextAppearance.AppCompat.Small"
+      android:textStyle="bold"
+      />
 
-    <TextView
-        android:id="@+id/tvMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_below="@+id/ivFingerDisplay"
-        android:layout_centerHorizontal="true" />
+  <Button
+      android:id="@+id/buttonScan"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/colorButton"
+      android:onClick="startScan"
+      android:text="Scan finger"
+      android:textColor="@color/colorWhite"
+      />
 
-</RelativeLayout>
+</LinearLayout>
